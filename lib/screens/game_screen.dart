@@ -117,7 +117,7 @@ class _GameScreenState extends State<GameScreen> {
     });
 
     // 2초 뒤: 게임오버 화면으로 전환
-    _goGameOverTimer = Timer(const Duration(seconds: 3.5), () {
+    _goGameOverTimer = Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
 
       _musicPlayer.stop(); // 전환 직전 MEGALOVANIA 정지
