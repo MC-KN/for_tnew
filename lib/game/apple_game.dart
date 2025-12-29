@@ -1,5 +1,8 @@
+// 수정
+
 import 'dart:async';
-import 'dart:math';
+import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -23,6 +26,8 @@ class SansAppleGame extends FlameGame with PanDetector {
   Stream<double> get timerStream => _timerController.stream;
 
   Timer? _timer;
+  Vector2? _panStart; // 드래그 시작점 고정
+
 
   // --- 오디오 플레이어 ---
   final AudioPlayer _backgroundMusicPlayer = AudioPlayer();
@@ -121,7 +126,7 @@ class SansAppleGame extends FlameGame with PanDetector {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         add(NumberCell(
-          number: Random().nextInt(9) + 1,
+          number: math.Random().nextInt(9) + 1,
           cellSize: cellSize,
           gridPos: Vector2(j.toDouble(), i.toDouble()),
           position: Vector2.zero(),
@@ -222,31 +227,31 @@ class SansAppleGame extends FlameGame with PanDetector {
     }
   }
 
+
   // --- 드래그 이벤트 로직 ---
   @override
   void onPanStart(DragStartInfo info) {
     if (gameOverNotifier.value) return;
 
-    // 사용자 상호작용 시 배경 음악 시작
     startBackgroundMusic();
 
-    selectionRect = Rect.fromLTWH(
-      info.eventPosition.global.x,
-      info.eventPosition.global.y,
-      0,
-      0,
-    );
+    _panStart = info.eventPosition.global; // Vector2
+    selectionRect = Rect.fromLTWH(_panStart!.x, _panStart!.y, 0, 0);
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (gameOverNotifier.value) return;
-    if (selectionRect == null) return;
+    if (_panStart == null) return;
 
-    selectionRect = Rect.fromPoints(
-      selectionRect!.topLeft,
-      Offset(info.eventPosition.global.x, info.eventPosition.global.y),
-    );
+    final current = info.eventPosition.global; // Vector2
+
+    final left = math.min(_panStart!.x, current.x);
+    final top = math.min(_panStart!.y, current.y);
+    final right = math.max(_panStart!.x, current.x);
+    final bottom = math.max(_panStart!.y, current.y);
+
+    selectionRect = Rect.fromLTRB(left, top, right, bottom);
     _updateSelection();
   }
 
@@ -256,7 +261,44 @@ class SansAppleGame extends FlameGame with PanDetector {
 
     await _checkSumAndClear();
     selectionRect = null;
+    _panStart = null;
   }
+
+
+  // @override
+  // void onPanStart(DragStartInfo info) {
+  //   if (gameOverNotifier.value) return;
+  //
+  //   // 사용자 상호작용 시 배경 음악 시작
+  //   startBackgroundMusic();
+  //
+  //   selectionRect = Rect.fromLTWH(
+  //     info.eventPosition.global.x,
+  //     info.eventPosition.global.y,
+  //     0,
+  //     0,
+  //   );
+  // }
+  //
+  // @override
+  // void onPanUpdate(DragUpdateInfo info) {
+  //   if (gameOverNotifier.value) return;
+  //   if (selectionRect == null) return;
+  //
+  //   selectionRect = Rect.fromPoints(
+  //     selectionRect!.topLeft,
+  //     Offset(info.eventPosition.global.x, info.eventPosition.global.y),
+  //   );
+  //   _updateSelection();
+  // }
+  //
+  // @override
+  // void onPanEnd(DragEndInfo info) async {
+  //   if (gameOverNotifier.value) return;
+  //
+  //   await _checkSumAndClear();
+  //   selectionRect = null;
+  // }
 
   void _updateSelection() {
     if (gameOverNotifier.value) return;
