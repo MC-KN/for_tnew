@@ -36,8 +36,11 @@ class _GameOverScreenState extends State<GameOverScreen> {
     } catch (_) {}
 
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/game'); // 즉시 재시작
+    // Navigator.of(context).pushReplacementNamed('/game'); // 즉시 재시작
+    Navigator.of(context).pushReplacementNamed('/'); // StartScreen으로
+
   }
+
 
   @override
   void dispose() {
