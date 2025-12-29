@@ -1,16 +1,9 @@
-# sans
+# 와! 샌즈!
 
-A new Flutter project.
+이거 pc에서 오른쪽 방향으로만 드래그되는데 고치기귀찮아서 안고침 넘 불편하면 말하셈;;
 
-## Getting Started
+폰에서 아마 개불편할거임 PC에서하삼
 
-This project is a starting point for a Flutter application.
+또 잼는 아이디어 있으면 말해줘
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+만드는거 잼썻다~
